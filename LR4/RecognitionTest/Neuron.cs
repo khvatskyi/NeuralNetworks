@@ -3,15 +3,20 @@ using System.Linq;
 
 namespace RecognitionTest
 {
-    public class Neuron
+    public class Neuron<TResult> where TResult : struct, IComparable, IConvertible, IComparable<TResult>, IEquatable<TResult>
     {
         private bool[] _inputs;
 
-        public bool Output => Inputs.Select((x, index) => (x ? 1 : 0) * Weights[index]).Sum() > 0;
+        private readonly Func<double, TResult> _activationFunc;
+
+        private double S => Inputs.Select((x, index) => (x ? 1 : 0) * Weights[index]).Sum();
+
+        public TResult Output => _activationFunc(S);
 
         public bool[] Inputs
         {
             get => _inputs;
+
             set
             {
                 _inputs = new bool[value.Length + 1];
@@ -27,15 +32,16 @@ namespace RecognitionTest
 
         public double[] Weights { get; private set; }
 
-        public Neuron()
-            :this(0)
+        public Neuron(Func<double, TResult> activationFunc)
+            : this(0, activationFunc)
         {
         }
 
-        private Neuron(uint numberOfInputs)
+        private Neuron(uint numberOfSynapses, Func<double, TResult> activationFunc)
         {
-            Weights = new double[numberOfInputs];
-            Inputs = new bool[numberOfInputs];
+            _activationFunc = activationFunc;
+            Weights = new double[numberOfSynapses];
+            Inputs = new bool[numberOfSynapses];
         }
 
         private void FillWeights()
@@ -46,7 +52,7 @@ namespace RecognitionTest
 
             for (var i = 0; i < Weights.Length; i++)
             {
-                Weights[i] = rand.NextDouble();
+                Weights[i] = Math.Round(rand.NextDouble(), 2);
             }
         }
     }
