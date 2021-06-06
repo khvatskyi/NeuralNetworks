@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RecognitionTest
+namespace NeuralNetwork
 {
     public static class ActivationFunction
     {

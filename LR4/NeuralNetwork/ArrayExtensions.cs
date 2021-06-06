@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RecognitionTest
+namespace NeuralNetwork
 {
     public static class ArrayExtensions<T>
     {

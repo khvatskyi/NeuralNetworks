@@ -1,4 +1,4 @@
-﻿namespace RecognitionTest
+﻿namespace NeuralNetwork
 {
     public static class BoolExtension
     {

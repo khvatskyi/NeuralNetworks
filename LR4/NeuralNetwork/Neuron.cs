@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace RecognitionTest
+namespace NeuralNetwork
 {
     public class Neuron<TResult> where TResult : struct, IComparable, IConvertible, IComparable<TResult>, IEquatable<TResult>
     {
