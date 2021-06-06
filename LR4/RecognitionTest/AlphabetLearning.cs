@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NeuralNetwork;
 
 namespace RecognitionTest
@@ -239,34 +240,30 @@ namespace RecognitionTest
             },
         };
 
-        public static int Learn(ref Neuron<double> neuron, double speed, int wordIndex)
+        public static int Learn(ref Neuron<double> neuron, double speed, int wordIndex, int maxEpoch = 7)
         {
-            bool wasCorrected;
             var learningIterations = 0;
 
-            do
+            for (var i = 0; i < maxEpoch; i++)
             {
-                wasCorrected = false;
-
-                for (var i = 0; i < X.GetLength(0); i++)
+                for (var j = 0; j < X.GetLength(0); j++)
                 {
-                    neuron.Inputs = ArrayExtensions<bool>.FromThreeDimensionsToOne(X, i); 
+                    var inputs = ArrayExtensions<bool>.FromThreeDimensionsToOne(X, j)
+                        .Select(BoolExtension.ConvertToDouble)
+                        .ToList();
 
-                    var d = i.Equals(wordIndex).ConvertToInt();
+                    neuron.InputSignals = inputs;
+
+                    var d = j.Equals(wordIndex).ConvertToInt();
 
                     var neuralError = GetNeuralError(d, neuron.Output);
 
-                    while (neuralError is > 0.15 or < 0)
+                    while (Math.Abs(d - neuron.Output) > 0.15)
                     {
-                        if (!wasCorrected)
+                        foreach (var synapse in neuron.Synapses)
                         {
-                            wasCorrected = true;
-                        }
-
-                        for (var j = 0; j < neuron.Weights.Length; j++)
-                        {
-                            var deltaW = Math.Round(speed * neuralError * neuron.Inputs[j].ConvertToInt(), 2);
-                            neuron.Weights[j] += deltaW;
+                            var deltaW = speed * neuralError * synapse.InputSignal;
+                            synapse.Weight += deltaW;
                         }
 
                         neuralError = GetNeuralError(d, neuron.Output);
@@ -274,15 +271,16 @@ namespace RecognitionTest
                 }
 
                 learningIterations++;
-
-            } while (wasCorrected);
+            }
 
             return learningIterations;
         }
 
         private static double GetNeuralError(double d, double output)
         {
-            return output * (1 - output) * (d - output);
+            // var result = Math.Pow(d - output, 2) / 1;
+            var result = output * (1 - output) * (d - output);
+            return result;
         }
     }
 }

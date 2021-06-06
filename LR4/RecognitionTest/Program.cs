@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NeuralNetwork;
 
 namespace RecognitionTest
@@ -10,16 +11,16 @@ namespace RecognitionTest
         {
             Console.Write("Enter speed: ");
             var learnSpeed = Math.Round(double.Parse(Console.ReadLine()), 2);
-
+            
             Console.Write("Enter number of letter: ");
             var indexOfAlphabet = int.Parse(Console.ReadLine()) - 1;
             Console.WriteLine();
 
             Func<double, double> activationFunc = ActivationFunction.Sigmoid;
 
-            var neuron = new Neuron<double>(activationFunc);
+            var neuron = new Neuron<double>(3, activationFunc);
             var learningIterations = AlphabetLearning.Learn(ref neuron, learnSpeed, indexOfAlphabet);
-
+            
             Console.WriteLine("Number of iterations: {0}\n", learningIterations);
 
             var numberOfLetters = AlphabetLearning.X.GetLength(0);
@@ -27,13 +28,16 @@ namespace RecognitionTest
             const int rows = 5;
 
             var results = new double[numberOfLetters];
-
+            
             for (var i = 0; i < numberOfLetters; i++)
             {
-                neuron.Inputs = ArrayExtensions<bool>.FromThreeDimensionsToOne(AlphabetLearning.X, i);
+                neuron.InputSignals = ArrayExtensions<bool>.FromThreeDimensionsToOne(AlphabetLearning.X, i)
+                    .Select(BoolExtension.ConvertToDouble)
+                    .ToList();
+            
                 results[i] = neuron.Output;
             }
-
+            
             Display("Outputs", rows, results);
 
             Display("Weights", rows, neuron.Weights);
@@ -48,7 +52,7 @@ namespace RecognitionTest
                 for (var j = i; j < array.Count; j += rows)
                 {
                     if (j >= array.Count) break;
-                    Console.Write($"{j+1} => {array[j]:N}\t");
+                    Console.Write($"{j} => {array[j]:N}\t");
                 }
                 Console.WriteLine();
             }
