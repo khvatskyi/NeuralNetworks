@@ -10,22 +10,24 @@
         {
             get => _inputSignal;
 
-            set => _inputSignal = value > 1
-                ? 1
-                : value < 0
-                    ? 0
-                    : value;
+            set => _inputSignal = value switch
+            {
+                > 1 => 1,
+                < 0 => 0,
+                _ => value
+            };
         }
 
         public double Weight
         {
             get => _weight;
 
-            set => _weight = value > 1
-                ? 1
-                : value < -1
-                    ? -1
-                    : value;
+            set => _weight = value switch
+            {
+                > 1 => 1,
+                < -1 => -1,
+                _ => value
+            };
         }
     }
 }
