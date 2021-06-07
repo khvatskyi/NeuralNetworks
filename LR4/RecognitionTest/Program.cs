@@ -38,12 +38,12 @@ namespace RecognitionTest
                 results[i] = neuron.Output;
             }
 
-            Display("Outputs", rows, results);
+            Display("Outputs", rows, results, 1);
 
             Display("Weights", rows, neuron.Weights);
         }
 
-        private static void Display<T>(string dataName, int rows, IReadOnlyList<T> array)
+        private static void Display<T>(string dataName, int rows, IReadOnlyList<T> array, int indexStartsWith = 0)
         {
             Console.WriteLine($"\n=============={dataName}==============" + Environment.NewLine);
 
@@ -52,7 +52,7 @@ namespace RecognitionTest
                 for (var j = i; j < array.Count; j += rows)
                 {
                     if (j >= array.Count) break;
-                    Console.Write($"{j} => {array[j]:N}\t");
+                    Console.Write($"{j + indexStartsWith} => {array[j]:N}\t");
                 }
                 Console.WriteLine();
             }
