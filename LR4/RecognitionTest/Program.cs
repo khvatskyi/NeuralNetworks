@@ -11,33 +11,33 @@ namespace RecognitionTest
         {
             Console.Write("Enter speed: ");
             var learnSpeed = Math.Round(double.Parse(Console.ReadLine()), 2);
-            
+
             Console.Write("Enter number of letter: ");
             var indexOfAlphabet = int.Parse(Console.ReadLine()) - 1;
             Console.WriteLine();
 
             Func<double, double> activationFunc = ActivationFunction.Sigmoid;
 
-            var neuron = new Neuron<double>(3, activationFunc);
-            var learningIterations = AlphabetLearning.Learn(ref neuron, learnSpeed, indexOfAlphabet);
-            
-            Console.WriteLine("Number of iterations: {0}\n", learningIterations);
+            var neuron = new Neuron<double>(activationFunc);
+            var epochs = AlphabetLearning.Learn(ref neuron, learnSpeed, indexOfAlphabet);
+
+            Console.WriteLine("Number of epochs: {0}\n", epochs);
 
             var numberOfLetters = AlphabetLearning.X.GetLength(0);
 
             const int rows = 5;
 
             var results = new double[numberOfLetters];
-            
+
             for (var i = 0; i < numberOfLetters; i++)
             {
                 neuron.InputSignals = ArrayExtensions<bool>.FromThreeDimensionsToOne(AlphabetLearning.X, i)
                     .Select(BoolExtension.ConvertToDouble)
                     .ToList();
-            
+
                 results[i] = neuron.Output;
             }
-            
+
             Display("Outputs", rows, results);
 
             Display("Weights", rows, neuron.Weights);

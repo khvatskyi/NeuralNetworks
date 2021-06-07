@@ -48,7 +48,7 @@ namespace NeuralNetwork
                 {
                     for (var i = 1; i < Synapses.Count; i++)
                     {
-                        Synapses[1].InputSignal = value[i-1];
+                        Synapses[i].InputSignal = value[i-1];
                     }
                 }
             }

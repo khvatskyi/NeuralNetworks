@@ -242,9 +242,7 @@ namespace RecognitionTest
 
         public static int Learn(ref Neuron<double> neuron, double speed, int wordIndex, int maxEpoch = 7)
         {
-            var learningIterations = 0;
-
-            for (var i = 0; i < maxEpoch; i++)
+            for(var i = 0; i < maxEpoch; i++)
             {
                 for (var j = 0; j < X.GetLength(0); j++)
                 {
@@ -258,7 +256,7 @@ namespace RecognitionTest
 
                     var neuralError = GetNeuralError(d, neuron.Output);
 
-                    while (Math.Abs(d - neuron.Output) > 0.15)
+                    while (Math.Abs(d - neuron.Output) > 0.10)
                     {
                         foreach (var synapse in neuron.Synapses)
                         {
@@ -269,16 +267,13 @@ namespace RecognitionTest
                         neuralError = GetNeuralError(d, neuron.Output);
                     }
                 }
-
-                learningIterations++;
             }
 
-            return learningIterations;
+            return maxEpoch;
         }
 
         private static double GetNeuralError(double d, double output)
         {
-            // var result = Math.Pow(d - output, 2) / 1;
             var result = output * (1 - output) * (d - output);
             return result;
         }

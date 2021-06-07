@@ -11,9 +11,9 @@ namespace NeuralNetwork
             return (ePow2X - 1) / (ePow2X + 1);
         }
 
-        public static bool MoreThanZero(double x)
+        public static double MoreThanZero(double x)
         {
-            return x > 0;
+            return x > 0 ? 1 : 0;
         }
 
         public static double Sigmoid(double x)
