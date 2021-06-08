@@ -9,7 +9,7 @@
 
         public static double ConvertToDouble(this bool element)
         {
-            return element ? 1 : 0;
+            return ConvertToInt(element);
         }
     }
 }
