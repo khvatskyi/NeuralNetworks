@@ -10,10 +10,10 @@ namespace RecognitionTest
         public static void Main()
         {
             Console.Write("Enter speed: ");
-            var learnSpeed = Math.Round(double.Parse(Console.ReadLine()), 2);
+            var learnSpeed = Math.Round(double.Parse(Console.ReadLine() ?? "0.1"), 2);
 
             Console.Write("Enter number of letter: ");
-            var indexOfAlphabet = int.Parse(Console.ReadLine()) - 1;
+            var indexOfAlphabet = int.Parse(Console.ReadLine() ?? "1") - 1;
             Console.WriteLine();
 
             Func<double, double> activationFunc = ActivationFunction.Sigmoid;
