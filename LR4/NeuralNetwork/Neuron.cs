@@ -60,7 +60,7 @@ namespace NeuralNetwork
         {
             get => _synapses;
 
-            set
+            private set
             {
                 var biasSynapse = _synapses?[0] ?? new Synapse
                 {

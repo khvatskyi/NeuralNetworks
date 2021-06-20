@@ -15,7 +15,18 @@ namespace NeuralNetwork
             Neurons = neurons;
         }
 
-        private List<Neuron<TResult>> Neurons { get; }
+        public List<Neuron<TResult>> Neurons { get; }
+
+        public List<TResult> Outputs
+        {
+            get
+            {
+                var outputs = new List<TResult>();
+                Neurons.ForEach(neuron => outputs.Add(neuron.Output));
+
+                return outputs;
+            }
+        }
 
         public Neuron<TResult> this[int i] => Neurons[i];
     }
